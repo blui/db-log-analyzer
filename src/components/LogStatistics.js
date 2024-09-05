@@ -15,28 +15,27 @@ const LogStatistics = ({ fileContent }) => {
   const parseLogFile = (content) => {
     const sections = content.split(
       "==========================================================================="
-    ); // Split based on log sections
+    ); // Split by separator line
     const counts = {};
     const details = [];
 
     sections.forEach((section) => {
-      // Regex to capture event type and everything up to 'Mem Usage'
-      const eventRegex = /(ERROR|WARNING)\s-\s(.+?)(?=Mem Usage)/s;
+      // Regex to capture a timestamp and everything until the next separator or "Mem Usage"
+      const eventRegex =
+        /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3} \[\d+\] (.+?)(?=Mem Usage|\n===========================================================================|\n$)/s;
       const match = section.match(eventRegex);
 
       if (match) {
-        const eventType = match[1]; // Capture ERROR or WARNING
-        const eventDescription = match[2].trim(); // Capture everything between '-' and 'Mem Usage'
-
-        // Combine type and description for detailed counting
-        const eventKey = `${eventType} - ${eventDescription}`;
+        const eventDescription = match[1].trim(); // Capture the event description after the timestamp
 
         // Count occurrences of each unique event
-        counts[eventKey] = counts[eventKey] ? counts[eventKey] + 1 : 1;
+        counts[eventDescription] = counts[eventDescription]
+          ? counts[eventDescription] + 1
+          : 1;
 
         // Only add unique events to the details array
-        if (!details.find((detail) => detail.event === eventKey)) {
-          details.push({ event: eventKey });
+        if (!details.find((detail) => detail.event === eventDescription)) {
+          details.push({ event: eventDescription });
         }
       }
     });
