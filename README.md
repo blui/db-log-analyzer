@@ -5,13 +5,10 @@
 ## Table of Contents
 
 - [Features](#features)
-- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Components](#components)
 - [Styling](#styling)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -20,18 +17,6 @@
 - **Event Statistics**: Automatically parse log files and categorize `ERROR` and `WARNING` events with counts.
 - **Windows-Inspired Design**: The interface is designed with a Windows 11-inspired aesthetic.
 - **Client-Side Processing**: No backend required; all processing happens in the browser.
-
-## Screenshots
-
-### Main Interface:
-
-![Main Interface](https://example.com/main-interface.png)  
-The main screen with options to select and analyze log files.
-
-### Log Analysis:
-
-![Log Analysis](https://example.com/log-analysis.png)  
-Viewing log content with event statistics.
 
 ## Installation
 
@@ -44,19 +29,11 @@ Viewing log content with event statistics.
 
 To run this project locally:
 
-1. Clone the repository:
+1. Clone the repository.
 
-   ```bash
-   git clone https://github.com/your-username/DataBridge-Log-Analyzer.git
-   ```
+2. Navigate to the project directory.
 
-2. Navigate to the project directory:
-
-   ```bash
-   cd DataBridge-Log-Analyzer
-   ```
-
-3. Install the dependencies:
+3. Install the dependencies.
 
    ```bash
    npm install
