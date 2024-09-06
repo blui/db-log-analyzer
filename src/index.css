@@ -1,4 +1,6 @@
 /* index.css */
+
+/* General styling for the app */
 body {
   margin: 0;
   padding: 0;
@@ -7,20 +9,29 @@ body {
   color: #333;
 }
 
-h1 {
-  font-size: 24px;
-  font-weight: 600;
+/* Header styling for the app title */
+header {
+  background-color: #0a74da; /* Blue background for the header */
+  color: white;
+  padding: 20px;
   text-align: center;
-  margin: 20px 0;
-  color: #0a74da;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Adds a slight shadow to the header */
 }
 
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Styling for section headers */
 h3 {
   font-size: 18px;
   margin: 20px 0;
   color: #333;
 }
 
+/* Button styling */
 button {
   background-color: #0a74da;
   color: white;
@@ -29,55 +40,87 @@ button {
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
 button:hover {
-  background-color: #084d9a;
+  background-color: #084d9a; /* Darken the button on hover */
 }
 
+/* Input field styling */
 input[type="file"] {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-bottom: 10px;
   font-size: 14px;
-  width: 100%;
+  width: 100%; /* Full width for responsiveness */
 }
 
+/* General table styling for event statistics */
 table.log-table,
 table.expanded-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #ddd; /* Adds border to the table */
 }
 
-th,
-td {
+/* Header styling for table */
+th {
+  background-color: #0a74da; /* Blue background for the header */
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd; /* Bottom border for header */
+}
+
+/* Cell styling for table */
+td,
+th {
   padding: 12px 15px;
-  border-bottom: 1px solid #f1f1f1;
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* Horizontal row separator */
+  border-right: 1px solid #ddd; /* Vertical separator between columns */
 }
 
+td:last-child,
+th:last-child {
+  border-right: none; /* Remove the right border from the last column */
+}
+
+/* Hover effect for rows */
 table.log-table tr:hover,
 .clickable-row:hover {
   background-color: #f1f1f1;
 }
 
+/* Styling for the log viewer textarea */
 textarea {
-  width: 100%;
+  width: 100%; /* Ensure the textarea takes full width of the container */
+  max-width: 100%; /* Prevents the textarea from overflowing */
   height: 350px;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-family: monospace;
   font-size: 14px;
+  box-sizing: border-box; /* Ensures padding is included in width calculations */
+  resize: none;
+  overflow: auto;
 }
 
+/* Main container styling for the app content */
 .container {
   width: 80%;
-  margin: 0 auto;
+  max-width: 1200px;
+  margin: 20px auto;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
 }
