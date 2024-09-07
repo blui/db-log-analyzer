@@ -1,5 +1,3 @@
-/* index.css */
-
 /* General styling for the app */
 body {
   margin: 0;
@@ -32,56 +30,52 @@ h3 {
 }
 
 /* Buttons */
+button,
+input[type="file"] {
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
 button {
   background-color: #0a74da;
   color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 button:hover {
   background-color: #084d9a;
 }
 
-/* Input field */
 input[type="file"] {
-  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  font-size: 14px;
   width: 100%;
 }
 
+/* Container for the Choose File button */
+.file-input-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* General table styling */
-table.log-table,
-table.expanded-table {
+table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
   background-color: #f9f9f9;
   border-radius: 6px;
-  overflow: hidden;
   border: 1px solid #ddd;
 }
 
-/* Table headers */
-th {
-  background-color: #0a74da;
-  color: white;
-  padding: 12px;
-  text-align: left;
-  font-weight: 600;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Table cells */
-td,
-th {
+th,
+td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -95,37 +89,36 @@ th:last-child {
 
 /* Fixed width for Timestamp column */
 td.timestamp-column {
-  width: 150px; /* Fixed width for the timestamp */
+  width: 150px;
   white-space: nowrap;
 }
 
 /* Event Message and Stack Trace evenly split the remaining space */
 td.event-message-column,
 td.stack-trace-column {
-  width: calc(50% - 75px); /* Dynamically split the remaining space evenly */
-  white-space: normal; /* Allow wrapping of text */
+  width: calc(50% - 75px);
+  white-space: normal;
   overflow: hidden;
 }
 
-/* Stack trace column will scroll horizontally for long traces */
 td.stack-trace-column {
   white-space: nowrap;
-  overflow-x: auto; /* Enable horizontal scrolling for long stack traces */
+  overflow-x: auto;
 }
 
 /* Preformatted text for stack traces */
 pre {
-  white-space: pre-wrap; /* Wrap text properly */
+  white-space: pre-wrap;
   word-wrap: break-word;
-  max-width: 100%; /* Prevent the preformatted text from exceeding its parent */
-  overflow-x: auto; /* Add horizontal scrolling if the content is too long */
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 /* Prevent table shift when clicking on an event with long details */
 table.expanded-table {
-  table-layout: fixed; /* Ensures the table remains within its container */
+  table-layout: fixed;
   max-width: 100%;
-  overflow-x: auto; /* Horizontal scroll if the content is too wide */
+  overflow-x: auto;
 }
 
 /* Styling for the log viewer textarea */
@@ -138,9 +131,9 @@ textarea {
   border-radius: 4px;
   font-family: monospace;
   font-size: 14px;
-  box-sizing: border-box;
   resize: none;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 /* Main container styling */
@@ -164,17 +157,18 @@ textarea {
     font-size: 1.25rem;
   }
 
-  button {
+  button,
+  input[type="file"] {
     font-size: 0.9rem;
   }
 
   td.timestamp-column {
-    width: 125px; /* Adjust timestamp width for smaller screens */
+    width: 125px;
   }
 
   td.event-message-column,
   td.stack-trace-column {
-    width: calc(50% - 62.5px); /* Dynamically split space on smaller screens */
+    width: calc(50% - 62.5px);
   }
 }
 
@@ -192,16 +186,17 @@ textarea {
     font-size: 1rem;
   }
 
-  button {
+  button,
+  input[type="file"] {
     font-size: 0.85rem;
   }
 
   td.timestamp-column {
-    width: 100px; /* Further reduce timestamp width for mobile screens */
+    width: 100px;
   }
 
   td.event-message-column,
   td.stack-trace-column {
-    width: calc(50% - 50px); /* Dynamically split space on mobile */
+    width: calc(50% - 50px);
   }
 }

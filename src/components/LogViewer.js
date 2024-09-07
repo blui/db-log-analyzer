@@ -1,15 +1,10 @@
 import React from "react";
 
-// LogViewer displays the content of the selected log file
-const LogViewer = ({ selectedFile, fileContent }) => {
-  return (
-    <div>
-      {/* Display the name of the selected file */}
-      <h3>Viewing: {selectedFile}</h3>
-      {/* Display the log content in a read-only text area */}
-      <textarea value={fileContent} readOnly />
-    </div>
-  );
-};
+const LogViewer = ({ selectedFile, fileContent }) => (
+  <div>
+    <h3>Viewing: {selectedFile}</h3>
+    <textarea value={fileContent} readOnly aria-label="Log file content" />
+  </div>
+);
 
 export default LogViewer;
