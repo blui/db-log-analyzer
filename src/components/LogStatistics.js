@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from "react";
 
-// Helper function to parse the log file content into events and their occurrences
+// Helper function to parse the log file content into events, timestamps, messages, and stack traces
 const parseLogFile = (content) => {
   const sections = content.split(
     "==========================================================================="
-  ); // Split the log by separators
+  );
   const occurrences = {};
 
   sections.forEach((section) => {
-    // Regex to capture timestamp and event description
+    // Regex to capture timestamp, event description, and stack trace
     const eventRegex =
       /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) \[\d+\] (.+?)(?=Mem Usage|\n===========================================================================|\n$)/s;
+    const stackTraceRegex = /(at .+)/g;
     const match = section.match(eventRegex);
 
     if (match) {
       const timestamp = match[1]; // Capture timestamp
-      const eventDescription = match[2].trim(); // Capture event description
+      const eventMessage = match[2].trim(); // Capture event message
+
+      const stackTraceMatches = section.match(stackTraceRegex); // Capture any stack trace
+      const stackTrace = stackTraceMatches
+        ? stackTraceMatches.join("\n")
+        : "No stack trace";
 
       // If the event hasn't been encountered yet, initialize an array for it
-      if (!occurrences[eventDescription]) {
-        occurrences[eventDescription] = [];
+      if (!occurrences[eventMessage]) {
+        occurrences[eventMessage] = [];
       }
-      // Add the event occurrence with the timestamp
-      occurrences[eventDescription].push({
+      // Add the event occurrence with the timestamp and stack trace
+      occurrences[eventMessage].push({
         timestamp,
-        fullEvent: `${timestamp} - ${eventDescription}`,
+        eventMessage,
+        stackTrace,
       });
     }
   });
@@ -42,7 +49,7 @@ const sortEventsByOccurrences = (events) => {
 
 const LogStatistics = ({ fileContent }) => {
   const [eventOccurrences, setEventOccurrences] = useState({});
-  const [expandedEvent, setExpandedEvent] = useState(null); // Track which event is expanded
+  const [expandedEvent, setExpandedEvent] = useState(null);
 
   // Parse the log file content when it changes
   useEffect(() => {
@@ -59,7 +66,6 @@ const LogStatistics = ({ fileContent }) => {
   return (
     <div>
       <h3>Log Statistics</h3>
-      {/* Table to display event statistics */}
       <table className="log-table">
         <thead>
           <tr>
@@ -68,11 +74,9 @@ const LogStatistics = ({ fileContent }) => {
           </tr>
         </thead>
         <tbody>
-          {/* Render the events sorted by their occurrences */}
           {sortEventsByOccurrences(eventOccurrences).map(
             ([event, occurrences], index) => (
               <React.Fragment key={index}>
-                {/* Clickable row to toggle the expanded view */}
                 <tr
                   onClick={() => toggleExpandEvent(event)}
                   className="clickable-row"
@@ -80,7 +84,6 @@ const LogStatistics = ({ fileContent }) => {
                   <td>{event}</td>
                   <td>{occurrences.length}</td>
                 </tr>
-                {/* Expanded view displaying the individual occurrences with timestamps */}
                 {expandedEvent === event && (
                   <tr>
                     <td colSpan="2">
@@ -88,11 +91,11 @@ const LogStatistics = ({ fileContent }) => {
                         <thead>
                           <tr>
                             <th>Timestamp</th>
-                            <th>Full Event</th>
+                            <th>Event Message</th>
+                            <th>Stack Trace</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {/* Sort occurrences by timestamp before displaying */}
                           {occurrences
                             .sort(
                               (a, b) =>
@@ -100,8 +103,15 @@ const LogStatistics = ({ fileContent }) => {
                             )
                             .map((occurrence, idx) => (
                               <tr key={idx}>
-                                <td>{occurrence.timestamp}</td>
-                                <td>{occurrence.fullEvent}</td>
+                                <td className="timestamp-column">
+                                  {occurrence.timestamp}
+                                </td>
+                                <td className="event-message-column">
+                                  {occurrence.eventMessage}
+                                </td>
+                                <td className="stack-trace-column">
+                                  <pre>{occurrence.stackTrace}</pre>
+                                </td>
                               </tr>
                             ))}
                         </tbody>

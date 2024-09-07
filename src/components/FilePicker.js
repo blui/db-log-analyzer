@@ -15,7 +15,6 @@ const FilePicker = ({ onFileSelect }) => {
     <div>
       {/* File input for selecting .log or .txt files */}
       <input type="file" accept=".log,.txt" onChange={handleFileChange} />
-      <button>Select File</button>
     </div>
   );
 };
