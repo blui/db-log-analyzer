@@ -1,0 +1,58 @@
+/* Styles for the FilePicker component */
+
+/* Styling for the directory picker section */
+.directory-picker {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.directory-name {
+  margin-left: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Error message styling */
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+/* Grid styling for the file list */
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  ); /* Responsive grid */
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Styling for each file item in the grid */
+.file-item {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  word-wrap: break-word; /* Allows the text to break and wrap to the next line */
+  white-space: normal; /* Allows text to wrap */
+  height: 40px; /* Adjust this value as needed */
+}
+
+/* Hover effect for file items */
+.file-item:hover {
+  background-color: #0a74da;
+  color: white;
+  border-color: #0a74da;
+}
+
+/* Active file selection feedback */
+.file-item:active {
+  background-color: #084d9a;
+  color: white;
+}
