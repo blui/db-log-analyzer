@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./FilePicker.css"; // Add this for custom styling
+import "./FilePicker.css"; // Add this for custom table styling
 
 const FilePicker = ({ onFileSelect }) => {
   const [files, setFiles] = useState([]);
@@ -10,7 +10,7 @@ const FilePicker = ({ onFileSelect }) => {
     try {
       const directoryHandle = await window.showDirectoryPicker();
       const fileList = [];
-      setSelectedDirectory(directoryHandle.name); // Set the selected directory name
+      setSelectedDirectory(directoryHandle.name);
 
       for await (const entry of directoryHandle.values()) {
         if (
@@ -52,17 +52,26 @@ const FilePicker = ({ onFileSelect }) => {
       {error && <p className="error-message">{error}</p>}
 
       {files.length > 0 && (
-        <div className="file-grid">
-          {files.map((file, index) => (
-            <div
-              key={index}
-              className="file-item"
-              onClick={() => handleFileClick(file)}
-            >
-              {file.name}
-            </div>
-          ))}
-        </div>
+        <table className="file-table">
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Size (KB)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {files.map((file, index) => (
+              <tr
+                key={index}
+                className="file-row"
+                onClick={() => handleFileClick(file)}
+              >
+                <td>{file.name}</td>
+                <td>{(file.size / 1024).toFixed(2)}</td> {/* File size in KB */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
