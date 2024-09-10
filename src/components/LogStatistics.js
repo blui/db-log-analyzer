@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import "./LogStatistics.css"; // Import the new CSS file
 
-// Helper function to parse and sort log file content
-const parseAndSortLogFile = (content) => {
+const parseLogFile = (content) => {
   const sections = content.split(
     "==========================================================================="
   );
@@ -16,6 +16,7 @@ const parseAndSortLogFile = (content) => {
     if (match) {
       const timestamp = match[1];
       const eventMessage = match[2].trim();
+
       const stackTraceMatches = section.match(stackTraceRegex);
       const stackTrace = stackTraceMatches
         ? stackTraceMatches.join("\n")
@@ -25,33 +26,50 @@ const parseAndSortLogFile = (content) => {
         occurrences[eventMessage] = [];
       }
 
-      occurrences[eventMessage].push({ timestamp, eventMessage, stackTrace });
+      occurrences[eventMessage].push({
+        timestamp,
+        eventMessage,
+        stackTrace,
+      });
     }
   });
 
-  return Object.entries(occurrences).sort(
+  return occurrences;
+};
+
+const sortEventsByOccurrences = (events) => {
+  return Object.entries(events).sort(
     ([, aOccurrences], [, bOccurrences]) =>
       bOccurrences.length - aOccurrences.length
   );
 };
 
 const LogStatistics = ({ fileContent }) => {
-  const [eventOccurrences, setEventOccurrences] = useState([]);
+  const [eventOccurrences, setEventOccurrences] = useState({});
   const [expandedEvent, setExpandedEvent] = useState(null);
+  const [totalEvents, setTotalEvents] = useState(0);
 
   useEffect(() => {
     if (fileContent) {
-      setEventOccurrences(parseAndSortLogFile(fileContent));
+      const parsedEvents = parseLogFile(fileContent);
+      setEventOccurrences(parsedEvents);
+
+      const total = Object.values(parsedEvents).reduce(
+        (acc, occurrences) => acc + occurrences.length,
+        0
+      );
+      setTotalEvents(total);
     }
   }, [fileContent]);
 
   const toggleExpandEvent = (event) => {
-    setExpandedEvent((prevEvent) => (prevEvent === event ? null : event));
+    setExpandedEvent(expandedEvent === event ? null : event);
   };
 
   return (
     <div>
       <h3>Log Statistics</h3>
+      <p>Total Events: {totalEvents}</p>
       <table className="log-table">
         <thead>
           <tr>
@@ -60,52 +78,54 @@ const LogStatistics = ({ fileContent }) => {
           </tr>
         </thead>
         <tbody>
-          {eventOccurrences.map(([event, occurrences], index) => (
-            <React.Fragment key={index}>
-              <tr
-                onClick={() => toggleExpandEvent(event)}
-                className="clickable-row"
-              >
-                <td>{event}</td>
-                <td>{occurrences.length}</td>
-              </tr>
-              {expandedEvent === event && (
-                <tr>
-                  <td colSpan="2">
-                    <table className="expanded-table">
-                      <thead>
-                        <tr>
-                          <th>Timestamp</th>
-                          <th>Event Message</th>
-                          <th>Stack Trace</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {occurrences
-                          .sort(
-                            (a, b) =>
-                              new Date(a.timestamp) - new Date(b.timestamp)
-                          )
-                          .map((occurrence, idx) => (
-                            <tr key={idx}>
-                              <td className="timestamp-column">
-                                {occurrence.timestamp}
-                              </td>
-                              <td className="event-message-column">
-                                {occurrence.eventMessage}
-                              </td>
-                              <td className="stack-trace-column">
-                                <pre>{occurrence.stackTrace}</pre>
-                              </td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </td>
+          {sortEventsByOccurrences(eventOccurrences).map(
+            ([event, occurrences], index) => (
+              <React.Fragment key={index}>
+                <tr
+                  onClick={() => toggleExpandEvent(event)}
+                  className="clickable-row"
+                >
+                  <td>{event}</td>
+                  <td>{occurrences.length}</td>
                 </tr>
-              )}
-            </React.Fragment>
-          ))}
+                {expandedEvent === event && (
+                  <tr>
+                    <td colSpan="2">
+                      <table className="expanded-table">
+                        <thead>
+                          <tr>
+                            <th>Timestamp</th>
+                            <th>Event Message</th>
+                            <th>Stack Trace</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {occurrences
+                            .sort(
+                              (a, b) =>
+                                new Date(a.timestamp) - new Date(b.timestamp)
+                            )
+                            .map((occurrence, idx) => (
+                              <tr key={idx}>
+                                <td className="timestamp-column">
+                                  {occurrence.timestamp}
+                                </td>
+                                <td className="event-message-column">
+                                  {occurrence.eventMessage}
+                                </td>
+                                <td className="stack-trace-column">
+                                  <pre>{occurrence.stackTrace}</pre>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            )
+          )}
         </tbody>
       </table>
     </div>

@@ -1,0 +1,82 @@
+/* General table styling for event statistics */
+table.log-table,
+table.expanded-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+/* Header styling for table */
+th {
+  background-color: #0a74da;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Cell styling for table */
+td,
+th {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+td:last-child,
+th:last-child {
+  border-right: none;
+}
+
+/* Hover effect for rows */
+table.log-table tr:hover,
+.clickable-row:hover {
+  background-color: #f1f1f1;
+}
+
+/* Styling for expanded table rows */
+table.expanded-table {
+  margin-top: 10px;
+  background-color: #f4f4f4;
+}
+
+/* Fixed width for Timestamp column */
+td.timestamp-column {
+  width: 150px;
+  white-space: nowrap;
+}
+
+/* Event Message and Stack Trace evenly split the remaining space */
+td.event-message-column,
+td.stack-trace-column {
+  width: calc(50% - 75px);
+  white-space: normal;
+  overflow: hidden;
+}
+
+/* Stack trace column will scroll horizontally for long traces */
+td.stack-trace-column {
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Preformatted text for stack traces */
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Prevent table shift when clicking on an event with long details */
+table.expanded-table {
+  table-layout: fixed;
+  max-width: 100%;
+  overflow-x: auto;
+}
