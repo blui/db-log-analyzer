@@ -5,6 +5,13 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f4f4;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex-grow: 1; /* Ensures the container grows to take up available space */
 }
 
 /* Header styling */
@@ -20,6 +27,16 @@ h1 {
   font-size: 28px;
   font-weight: 600;
   margin: 0;
+}
+
+/* Footer styling */
+footer {
+  background-color: #f4f4f4;
+  text-align: center;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  color: #666;
 }
 
 /* Section headers */

@@ -12,7 +12,7 @@ const App = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       setFileContent(e.target.result);
-      setSelectedFile(file?.name);
+      setSelectedFile(file.name);
     };
     reader.readAsText(file);
   };
@@ -31,6 +31,9 @@ const App = () => {
           </>
         )}
       </div>
+      <footer>
+        <p>&copy; {new Date().getFullYear()} Brian Lui. All rights reserved.</p>
+      </footer>
     </>
   );
 };
