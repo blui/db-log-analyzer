@@ -20,7 +20,7 @@ const App = () => {
   return (
     <>
       <header>
-        <h1>DataBridge Log Analyzer</h1>
+        <h1>Log Analyzer</h1>
       </header>
       <div className="container">
         <FilePicker onFileSelect={handleFileSelect} />
