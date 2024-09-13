@@ -46,20 +46,25 @@ The app captures the event starting from ERROR, WARNING, or other event descript
 
 ## Components
 
-1. **App.js**
-   The main component that holds the state for the selected file and its content. It renders the FilePicker, LogViewer, DateRangeViewer, and LogStatistics components.
+**App.js**
 
-2. **FilePicker.js**
-   A component that allows users to select a directory or upload .log or .txt files. It lists all available files from the selected directory.
+- The main component that holds the state for the selected file and its content. It renders the FilePicker, LogViewer, DateRangeViewer, and LogStatistics components.
 
-3. **LogViewer.js**
-   Displays the content of the uploaded log file in a read-only text area. It also scrolls to a specific datetime when provided by the DateRangeViewer.
+**FilePicker.js**
 
-4. **LogStatistics.js**
-   Analyzes the log file and displays a table of categorized log events (e.g., ERROR, WARNING). Users can click on an event to drill down into details such as timestamps, event messages, and stack traces.
+- A component that allows users to select a directory or upload .log or .txt files. It lists all available files from the selected directory.
 
-5. **DateRangeViewer.js**
-   Provides a facility for users to enter a datetime value and jump to the closest matching log entry.
+**LogViewer.js**
+
+- Displays the content of the uploaded log file in a read-only text area. It also scrolls to a specific datetime when provided by the DateRangeViewer.
+
+**LogStatistics.js**
+
+- Analyzes the log file and displays a table of categorized log events (e.g., ERROR, WARNING). Users can click on an event to drill down into details such as timestamps, event messages, and stack traces.
+
+**DateRangeViewer.js**
+
+- Provides a facility for users to enter a datetime value and jump to the closest matching log entry.
 
 ## License
 
