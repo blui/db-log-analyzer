@@ -23,17 +23,17 @@ At the time of writing this, the application is configured for use with DataBrid
 
 ## Usage
 
-1. Select a Directory or File: Use the "Select Directory" button to choose a folder containing .log or .txt files, or directly upload a log file.
+1. **Select a Directory or File**: Use the "Select Directory" button to choose a folder containing .log or .txt files, or directly upload a log file.
 
-2. View the Log File Content: Once a file is selected, the log content will be displayed in a scrollable text area.
+2. **View the Log File Content**: Once a file is selected, the log content will be displayed in a scrollable text area.
 
-3. Analyze Events: The application parses the log file and shows a table of events (e.g., ERROR, WARNING, or other messages) along with the count of their occurrences.
+3. **Analyze Events**: The application parses the log file and shows a table of events (e.g., ERROR, WARNING, or other messages) along with the count of their occurrences.
 
-4. Drill Down into Events: Click on any event in the statistics table to view details, including timestamps, event messages, and stack traces (if applicable).
+4. **Drill Down into Events**: Click on any event in the statistics table to view details, including timestamps, event messages, and stack traces (if applicable).
 
-5. Date Range Viewer: Use the date range viewer to jump to a specific log entry by entering a valid datetime value.
+5. **Date Range Viewer**: Use the date range viewer to jump to a specific log entry by entering a valid datetime value.
 
-### Current Support Log Formats
+### Currently Support Log Formats (DataBridge)
 
 ```
 ===========================================================================
@@ -46,19 +46,19 @@ The app captures the event starting from ERROR, WARNING, or other event descript
 
 ## Components
 
-1. App.js
+1. **App.js**
    The main component that holds the state for the selected file and its content. It renders the FilePicker, LogViewer, DateRangeViewer, and LogStatistics components.
 
-2. FilePicker.js
+2. **FilePicker.js**
    A component that allows users to select a directory or upload .log or .txt files. It lists all available files from the selected directory.
 
-3. LogViewer.js
+3. **LogViewer.js**
    Displays the content of the uploaded log file in a read-only text area. It also scrolls to a specific datetime when provided by the DateRangeViewer.
 
-4. LogStatistics.js
+4. **LogStatistics.js**
    Analyzes the log file and displays a table of categorized log events (e.g., ERROR, WARNING). Users can click on an event to drill down into details such as timestamps, event messages, and stack traces.
 
-5. DateRangeViewer.js
+5. **DateRangeViewer.js**
    Provides a facility for users to enter a datetime value and jump to the closest matching log entry.
 
 ## License
