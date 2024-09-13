@@ -1,34 +1,35 @@
 /* General table styling for event statistics */
 table.log-table,
 table.expanded-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid #ddd;
+  width: 100%; /* Full width for the tables */
+  border-collapse: collapse; /* Remove gaps between table borders */
+  margin-top: 20px; /* Space above the table */
+  background-color: #f9f9f9; /* Light background color for the table */
+  border-radius: 6px; /* Rounded corners for the table */
+  overflow: hidden; /* Prevent overflow of table content */
+  border: 1px solid #ddd; /* Light border around the table */
 }
 
-/* Header styling for table */
+/* Header styling for the table */
 th {
-  background-color: #0a74da;
-  color: white;
-  padding: 12px;
-  text-align: left;
-  font-weight: 600;
-  border-bottom: 1px solid #ddd;
+  background-color: #0a74da; /* Blue background for the header */
+  color: white; /* White text for the header */
+  padding: 12px; /* Padding inside header cells */
+  text-align: left; /* Left-align text */
+  font-weight: 600; /* Make header text bold */
+  border-bottom: 1px solid #ddd; /* Add border below header */
 }
 
-/* Cell styling for table */
+/* Styling for both header and body cells */
 td,
 th {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  padding: 12px 15px; /* Padding inside table cells */
+  text-align: left; /* Left-align text in cells */
+  border-bottom: 1px solid #ddd; /* Border between rows */
+  border-right: 1px solid #ddd; /* Border between columns */
 }
 
+/* Remove right border from the last cell in each row */
 td:last-child,
 th:last-child {
   border-right: none;
@@ -37,46 +38,46 @@ th:last-child {
 /* Hover effect for rows */
 table.log-table tr:hover,
 .clickable-row:hover {
-  background-color: #f1f1f1;
+  background-color: #f1f1f1; /* Light grey background on hover */
 }
 
 /* Styling for expanded table rows */
 table.expanded-table {
-  margin-top: 10px;
-  background-color: #f4f4f4;
+  margin-top: 10px; /* Space above the expanded table */
+  background-color: #f4f4f4; /* Slightly darker background for expanded rows */
 }
 
-/* Fixed width for Timestamp column */
+/* Fixed width for the Timestamp column */
 td.timestamp-column {
-  width: 150px;
-  white-space: nowrap;
+  width: 150px; /* Set a fixed width for the timestamp column */
+  white-space: nowrap; /* Prevent wrapping in the timestamp column */
 }
 
-/* Event Message and Stack Trace evenly split the remaining space */
+/* Event Message and Stack Trace columns evenly split the remaining space */
 td.event-message-column,
 td.stack-trace-column {
-  width: calc(50% - 75px);
-  white-space: normal;
-  overflow: hidden;
+  width: calc(50% - 75px); /* Each column takes half of the remaining width */
+  white-space: normal; /* Allow wrapping for long content */
+  overflow: hidden; /* Hide any overflow */
 }
 
-/* Stack trace column will scroll horizontally for long traces */
+/* Stack trace column will scroll horizontally if content is too long */
 td.stack-trace-column {
-  white-space: nowrap;
-  overflow-x: auto;
+  white-space: nowrap; /* Prevent wrapping for stack trace content */
+  overflow-x: auto; /* Enable horizontal scrolling for long content */
 }
 
 /* Preformatted text for stack traces */
 pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-width: 100%;
-  overflow-x: auto;
+  white-space: pre-wrap; /* Wrap long lines in preformatted text */
+  word-wrap: break-word; /* Break words that are too long */
+  max-width: 100%; /* Ensure the preformatted text doesn't overflow */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
 }
 
-/* Prevent table shift when clicking on an event with long details */
+/* Ensure the expanded table doesn't shift when long content is displayed */
 table.expanded-table {
-  table-layout: fixed;
-  max-width: 100%;
-  overflow-x: auto;
+  table-layout: fixed; /* Fix the table layout to prevent shifting */
+  max-width: 100%; /* Ensure the expanded table stays within its container */
+  overflow-x: auto; /* Allow horizontal scrolling for wide content */
 }

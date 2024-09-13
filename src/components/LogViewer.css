@@ -1,0 +1,16 @@
+/* Styles for the LogViewer component */
+
+/* Log viewer container */
+.log-viewer {
+  height: 350px; /* Fixed height to control the visible area */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Light border around the log viewer */
+  padding: 10px; /* Padding inside the log viewer */
+  font-family: monospace; /* Monospace font for log content */
+}
+
+/* Each log line inside the log viewer */
+.log-line {
+  white-space: pre-wrap; /* Preserve whitespace and wrap long lines */
+  padding: 5px; /* Padding inside each log line */
+}

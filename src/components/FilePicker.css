@@ -4,77 +4,80 @@
 .directory-picker {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Space below the directory picker */
 }
 
 .directory-name {
-  margin-left: 15px;
+  margin-left: 15px; /* Space between button and directory name */
   font-weight: bold;
-  color: #333;
+  color: #333; /* Dark text color for directory name */
 }
 
 /* Error message styling */
 .error-message {
-  color: red;
-  margin-top: 10px;
+  color: red; /* Red color for error messages */
+  margin-top: 10px; /* Space above error message */
 }
 
 /* Table styling */
 .file-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid #ddd;
+  width: 100%; /* Full width table */
+  border-collapse: collapse; /* Remove space between table borders */
+  margin-top: 20px; /* Space above table */
+  background-color: #f9f9f9; /* Light background for table */
+  border-radius: 6px; /* Rounded corners */
+  overflow: hidden; /* Prevent overflow of content */
+  border: 1px solid #ddd; /* Light border around table */
 }
 
-/* Header styling */
+/* Header styling for the table */
 .file-table th {
-  background-color: #0a74da; /* Set the header background color */
-  color: white; /* White text color for the header */
-  padding: 12px;
-  text-align: left;
-  font-weight: bold;
-  border-bottom: 1px solid #ddd;
+  background-color: #0a74da; /* Blue background for the header */
+  color: white; /* White text for the header */
+  padding: 12px; /* Padding inside header cells */
+  text-align: left; /* Left-align header text */
+  font-weight: bold; /* Bold header text */
+  border-bottom: 1px solid #ddd; /* Border between header and body */
 }
 
 /* Table rows and cell styling */
 .file-table td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
+  padding: 12px 15px; /* Padding inside table cells */
+  border-bottom: 1px solid #ddd; /* Border between table rows */
+  text-align: left; /* Left-align table cell content */
 }
 
-/* Hover effect for rows */
+/* Hover effect for table rows */
 .file-table tr:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
+  background-color: #f1f1f1; /* Light grey background on hover */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
-/* Alternating row colors (optional) */
+/* Alternating row colors for better readability */
 .file-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f9f9f9; /* Light grey background for even rows */
 }
 
 .file-table tr:nth-child(odd) {
-  background-color: #ffffff;
+  background-color: #ffffff; /* White background for odd rows */
 }
 
-/* Responsive table adjustments */
+/* Responsive adjustments for smaller screens */
+
+/* Medium screens (max width: 768px) */
 @media (max-width: 768px) {
   .file-table th,
   .file-table td {
-    padding: 10px;
-    font-size: 0.9rem;
+    padding: 10px; /* Slightly reduced padding */
+    font-size: 0.9rem; /* Reduced font size */
   }
 }
 
+/* Small screens (max width: 480px) */
 @media (max-width: 480px) {
   .file-table th,
   .file-table td {
-    padding: 8px;
-    font-size: 0.85rem;
+    padding: 8px; /* Further reduced padding */
+    font-size: 0.85rem; /* Further reduced font size */
   }
 }
