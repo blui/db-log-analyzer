@@ -1,0 +1,28 @@
+.date-range-viewer {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds a gap between the DateTime input and the 'View In Log' button */
+  margin-bottom: 20px; /* Adds some space below the component */
+}
+
+.date-range-viewer input[type="datetime-local"] {
+  padding: 10px; /* Add some padding for the datetime input */
+  font-size: 14px; /* Adjust the font size for readability */
+  border-radius: 4px; /* Rounded corners */
+  border: 1px solid #ccc; /* Light gray border */
+}
+
+.date-range-viewer button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: #0a74da;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.date-range-viewer button:hover {
+  background-color: #084d9a; /* Darken the button on hover */
+}
