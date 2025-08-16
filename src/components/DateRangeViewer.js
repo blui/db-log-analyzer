@@ -1,50 +1,46 @@
 import React, { useState } from "react";
-import "./DateRangeViewer.css"; // Custom styling for DateRangeViewer
+import "./DateRangeViewer.css";
 
 /**
- * DateRangeViewer component allows the user to input a datetime
- * and navigate to that date in the log file.
+ * DateRangeViewer allows the user to input a datetime and navigate to that date in the log file.
  */
 const DateRangeViewer = ({ onDateSelect }) => {
-  const [dateInput, setDateInput] = useState(""); // Holds the user's input
-  const [error, setError] = useState(""); // Holds any error message
+  const [dateInput, setDateInput] = useState("");
+  const [error, setError] = useState("");
 
-  /**
-   * Updates the dateInput state when the user types in the input field.
-   * @param {Object} e - Event object from the input field.
-   */
+  // Update the dateInput state when the user types in the input field
   const handleDateChange = (e) => {
-    setDateInput(e.target.value); // Update the date input with the user's value
+    setDateInput(e.target.value);
   };
 
-  /**
-   * Validates the input date and passes it to the parent component if valid.
-   */
+  // Validate the input date and pass it to the parent component if valid
   const handleGoTo = () => {
-    const inputDate = new Date(dateInput); // Convert the input value to a Date object
-    // Check if the input date is valid
+    const inputDate = new Date(dateInput);
     if (isNaN(inputDate.getTime())) {
-      setError("Invalid date format. Please enter a valid datetime."); // Show error if the date is invalid
+      setError("Invalid date format. Please enter a valid datetime.");
       return;
     }
-
-    setError(""); // Clear error message if the input is valid
-    onDateSelect(inputDate); // Pass the selected date to the parent component
+    setError("");
+    onDateSelect(inputDate);
   };
 
   return (
     <div className="date-range-viewer">
-      {/* Input field for entering the date */}
       <input
         type="datetime-local"
         value={dateInput}
         onChange={handleDateChange}
         placeholder="Enter a datetime"
+        aria-label="Enter a datetime to jump to in the log"
       />
-      {/* Button to trigger the 'go to' action */}
-      <button onClick={handleGoTo}>View In Log</button>
-      {/* Display error message if input is invalid */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <button onClick={handleGoTo} aria-label="View log at selected datetime">
+        View In Log
+      </button>
+      {error && (
+        <p style={{ color: "red" }} role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 };

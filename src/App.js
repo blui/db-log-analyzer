@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import FilePicker from "./components/FilePicker";
 import LogViewer from "./components/LogViewer";
 import LogStatistics from "./components/LogStatistics";
@@ -9,10 +9,11 @@ import "./index.css"; // Import global styles
  * Main App component to handle file selection, log viewing, and statistics.
  */
 const App = () => {
-  const [selectedFile, setSelectedFile] = useState(null); // Holds the selected file name
-  const [fileContent, setFileContent] = useState(""); // Holds the content of the selected log file
-  const [scrollToDate, setScrollToDate] = useState(null); // Holds the datetime to scroll to in the log file
-  const [searchTerm, setSearchTerm] = useState(""); // Search keyword
+  // State for selected file, file content, scroll target, search, and severity filters
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileContent, setFileContent] = useState("");
+  const [scrollToDate, setScrollToDate] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedSeverities, setSelectedSeverities] = useState({
     INFO: true,
     WARN: true,
@@ -22,6 +23,7 @@ const App = () => {
    * Handles changes to the search input.
    * @param {object} e - The input event.
    */
+  // Handle search input changes
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -30,56 +32,77 @@ const App = () => {
    * Handles changes to severity checkboxes.
    * @param {object} e - The input event.
    */
+  // Handle severity checkbox changes
   const handleSeverityChange = (e) => {
     const { name, checked } = e.target;
     setSelectedSeverities((prev) => ({ ...prev, [name]: checked }));
   };
 
   /**
-   * Filters log lines based on search term and selected severities.
+   * Filters log entries (multi-line) based on search term and selected severities.
+   * Each entry starts with a timestamped line (YYYY-MM-DD HH:MM:SS,SSS) and includes all following lines until the next timestamped line or end of file.
    * @param {string} content - The log file content.
    * @returns {string} - Filtered log content as a string.
    */
-  const getFilteredContent = (content) => {
-    if (!content) return "";
+  /**
+   * Memoized function to filter log entries (multi-line) based on search term and selected severities.
+   * Each entry starts with a timestamped line (YYYY-MM-DD HH:MM:SS,SSS) and includes all following lines until the next timestamped line or end of file.
+   * If all severities are unchecked, returns an empty string for performance.
+   */
+  const filteredContent = useMemo(() => {
+    if (!fileContent) return "";
     const severities = Object.keys(selectedSeverities).filter(
       (sev) => selectedSeverities[sev]
     );
-    return content
-      .split("\n")
-      .filter((line) => {
-        // Check severity
-        const matchesSeverity =
-          severities.length === 0 ||
-          severities.some((sev) => line.includes(sev));
-        // Check search term
-        const matchesSearch =
-          searchTerm === "" ||
-          line.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesSeverity && matchesSearch;
-      })
-      .join("\n");
-  };
+    // If no severities are selected, show nothing
+    if (severities.length === 0) return "";
+    const lines = fileContent.split("\n");
+    const entryRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}/;
+    const entries = [];
+    let currentEntry = [];
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (entryRegex.test(line)) {
+        if (currentEntry.length > 0) entries.push(currentEntry);
+        currentEntry = [line];
+      } else {
+        currentEntry.push(line);
+      }
+    }
+    if (currentEntry.length > 0) entries.push(currentEntry);
+    // Filter entries by header line
+    const filtered = entries.filter((entry) => {
+      const header = entry[0] || "";
+      const matchesSeverity = severities.some((sev) => header.includes(sev));
+      const matchesSearch =
+        searchTerm === "" ||
+        header.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSeverity && matchesSearch;
+    });
+    return filtered.map((entry) => entry.join("\n")).join("\n");
+  }, [fileContent, selectedSeverities, searchTerm]);
 
   /**
    * Handles file selection and reads the content of the file.
    * @param {File} file - The file object selected by the user.
    */
+  // Handle file selection and read content
   const handleFileSelect = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      setFileContent(e.target.result); // Set the content of the file
-      setSelectedFile(file.name); // Set the selected file name
+      setFileContent(e.target.result);
+      setSelectedFile(file.name);
     };
-    reader.readAsText(file); // Read the file content as text
+    reader.readAsText(file);
   };
 
   /**
    * Handles the date selection to scroll to in the log viewer.
    * @param {Date} date - The datetime selected by the user.
    */
+  // Handle date selection for scrolling
   const handleDateSelect = (date) => {
-    setScrollToDate(date); // Set the datetime to scroll to
+    setScrollToDate(date);
   };
 
   return (
@@ -141,11 +164,11 @@ const App = () => {
             {/* LogViewer to display the filtered log content */}
             <LogViewer
               selectedFile={selectedFile}
-              fileContent={getFilteredContent(fileContent)}
+              fileContent={filteredContent}
               scrollToDate={scrollToDate}
             />
-            {/* LogStatistics to display the log analysis */}
-            <LogStatistics fileContent={fileContent} />
+            {/* LogStatistics to display the log analysis for filtered content */}
+            <LogStatistics fileContent={filteredContent} />
           </>
         )}
       </div>

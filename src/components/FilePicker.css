@@ -42,9 +42,15 @@
 
 /* Table rows and cell styling */
 .file-table td {
-  padding: 12px 15px; /* Padding inside table cells */
-  border-bottom: 1px solid #ddd; /* Border between table rows */
-  text-align: left; /* Left-align table cell content */
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Focus style for accessibility */
+.file-row:focus {
+  outline: 2px solid #0a74da;
+  outline-offset: -2px;
 }
 
 /* Hover effect for table rows */

@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
-import "./LogViewer.css"; // Custom styling for LogViewer
+import "./LogViewer.css";
 
 /**
- * Function to find the index of the closest date in the log lines.
+ * Finds the index of the closest log line with a datetime >= the given date.
  * @param {Array} lines - Array of log lines.
  * @param {Date} date - The date to search for.
- * @returns {number} - The index of the closest log line with the matching or closest date.
+ * @returns {number} - The index of the closest log line or -1 if not found.
  */
 const findClosestDateIndex = (lines, date) => {
   for (let i = 0; i < lines.length; i++) {
@@ -14,33 +14,32 @@ const findClosestDateIndex = (lines, date) => {
     const match = line.match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}/);
     if (match) {
       // Convert matched datetime string into a valid JS Date object
-      const lineDate = new Date(match[0].replace(",", ".")); // Replace comma with period to match JS Date format
+      const lineDate = new Date(match[0].replace(",", "."));
       if (lineDate >= date) {
-        return i; // Return index of the first line that matches or is after the target date
+        return i;
       }
     }
   }
-  return -1; // Return -1 if no matching date is found
+  return -1;
 };
 
 /**
- * LogViewer component to display the content of the selected log file.
- * It also scrolls to the closest datetime if provided via the scrollToDate prop.
+ * LogViewer displays the content of the selected log file.
+ * If scrollToDate is provided, it scrolls to the closest matching datetime.
  */
 const LogViewer = ({ selectedFile, fileContent, scrollToDate }) => {
-  const logViewerRef = useRef(null); // Reference to the log viewer div
-  const lines = fileContent.split("\n"); // Split the file content into individual lines
+  const logViewerRef = useRef(null);
+  const lines = fileContent.split("\n");
 
-  // Effect to handle scrolling to the closest datetime when scrollToDate changes
+  // Scroll to the closest datetime when scrollToDate changes
   useEffect(() => {
     if (scrollToDate) {
-      const closestIndex = findClosestDateIndex(lines, scrollToDate); // Find the closest matching date in the log
+      const closestIndex = findClosestDateIndex(lines, scrollToDate);
       if (closestIndex !== -1 && logViewerRef.current) {
         const logLineElement = logViewerRef.current.querySelector(
           `#log-line-${closestIndex}`
         );
         if (logLineElement) {
-          // Smoothly scroll the log line into view, centered vertically
           logLineElement.scrollIntoView({
             behavior: "smooth",
             block: "center",
@@ -48,16 +47,24 @@ const LogViewer = ({ selectedFile, fileContent, scrollToDate }) => {
         }
       }
     }
-  }, [scrollToDate, lines]); // Effect depends on scrollToDate and the lines array
+  }, [scrollToDate, lines]);
 
   return (
     <div className="log-viewer-container">
-      <h3>Viewing: {selectedFile}</h3>{" "}
-      {/* Display the name of the selected file */}
-      <div className="log-viewer" ref={logViewerRef}>
-        {/* Map through lines and display each one */}
+      <h3>Viewing: {selectedFile}</h3>
+      <div
+        className="log-viewer"
+        ref={logViewerRef}
+        aria-label="Log file content"
+        tabIndex={0}
+      >
         {lines.map((line, index) => (
-          <div key={index} id={`log-line-${index}`} className="log-line">
+          <div
+            key={index}
+            id={`log-line-${index}`}
+            className="log-line"
+            aria-label={`Log line ${index + 1}`}
+          >
             {line}
           </div>
         ))}

@@ -11,6 +11,12 @@
 
 /* Each log line inside the log viewer */
 .log-line {
-  white-space: pre-wrap; /* Preserve whitespace and wrap long lines */
-  padding: 5px; /* Padding inside each log line */
+  white-space: pre-wrap;
+  padding: 5px;
+}
+
+/* Focus style for accessibility (if needed for future interactive lines) */
+.log-line:focus {
+  outline: 2px solid #0a74da;
+  outline-offset: -2px;
 }

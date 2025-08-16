@@ -38,7 +38,13 @@ th:last-child {
 /* Hover effect for rows */
 table.log-table tr:hover,
 .clickable-row:hover {
-  background-color: #f1f1f1; /* Light grey background on hover */
+  background-color: #f1f1f1;
+}
+
+/* Focus style for accessibility */
+.clickable-row:focus {
+  outline: 2px solid #0a74da;
+  outline-offset: -2px;
 }
 
 /* Styling for expanded table rows */
