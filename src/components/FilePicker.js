@@ -83,7 +83,7 @@ const FilePicker = ({ onFileSelect }) => {
                 onClick={() => handleFileClick(file)}
               >
                 <td>{file.name}</td>
-                <td>{(file.size / 1024).toFixed(2)}</td>{" "}
+                <td>{(file.size / 1024).toFixed(2)}</td>
                 {/* Convert file size to KB */}
               </tr>
             ))}

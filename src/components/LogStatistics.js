@@ -109,7 +109,7 @@ const LogStatistics = ({ fileContent }) => {
                   className="clickable-row"
                 >
                   <td>{event}</td>
-                  <td>{occurrences.length}</td>{" "}
+                  <td>{occurrences.length}</td>
                   {/* Display the count of occurrences */}
                 </tr>
                 {expandedEvent === event && (
