@@ -1,3 +1,19 @@
+/* Highlighting for log severities */
+.log-line.error {
+  background-color: #ffe5e5;
+  color: #b30000;
+  font-weight: bold;
+}
+.log-line.warn {
+  background-color: #fffbe5;
+  color: #b38f00;
+  font-weight: bold;
+}
+.log-line.info {
+  background-color: #e5f0ff;
+  color: #0057b3;
+  font-weight: bold;
+}
 /* Styles for the LogViewer component */
 
 /* Log viewer container */

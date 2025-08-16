@@ -58,16 +58,23 @@ const LogViewer = ({ selectedFile, fileContent, scrollToDate }) => {
         aria-label="Log file content"
         tabIndex={0}
       >
-        {lines.map((line, index) => (
-          <div
-            key={index}
-            id={`log-line-${index}`}
-            className="log-line"
-            aria-label={`Log line ${index + 1}`}
-          >
-            {line}
-          </div>
-        ))}
+        {lines.map((line, index) => {
+          // Determine severity for highlighting
+          let severityClass = "";
+          if (/\bERROR\b/.test(line)) severityClass = "error";
+          else if (/\bWARN(ING)?\b/.test(line)) severityClass = "warn";
+          else if (/\bINFO(RMATION)?\b/.test(line)) severityClass = "info";
+          return (
+            <div
+              key={index}
+              id={`log-line-${index}`}
+              className={`log-line${severityClass ? ` ${severityClass}` : ""}`}
+              aria-label={`Log line ${index + 1}`}
+            >
+              {line}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
