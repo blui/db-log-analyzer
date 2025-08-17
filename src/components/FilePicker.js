@@ -2,15 +2,25 @@ import React, { useState } from "react";
 import "./FilePicker.css";
 
 /**
- * FilePicker component allows the user to select a directory and display .log and .txt files found in that directory.
- * The user can then click a file to load its contents.
+ * FilePicker enables users to select a directory and lists all .log and .txt files found within.
+ * Users can select a file to load its contents for analysis.
+ *
+ * @component
+ * @param {Object} props
+ * @param {function} props.onFileSelect - Callback invoked with the selected file and its content.
  */
 const FilePicker = ({ onFileSelect }) => {
-  const [files, setFiles] = useState([]); // List of files in the selected directory
-  const [selectedDirectory, setSelectedDirectory] = useState(""); // Name of the selected directory
-  const [error, setError] = useState(""); // Error message
+  // List of files in the selected directory
+  const [files, setFiles] = useState([]);
+  // Name of the selected directory
+  const [selectedDirectory, setSelectedDirectory] = useState("");
+  // Error message for directory or file access
+  const [error, setError] = useState("");
 
-  // Handle directory selection using File System Access API
+  /**
+   * Handles directory selection using the File System Access API.
+   * Populates the file list with .log and .txt files from the selected directory.
+   */
   const handleDirectorySelect = async () => {
     try {
       const directoryHandle = await window.showDirectoryPicker();
@@ -35,7 +45,11 @@ const FilePicker = ({ onFileSelect }) => {
     }
   };
 
-  // Handle file selection when a file row is clicked
+  /**
+   * Handles file selection when a file row is clicked.
+   * Reads the file content and invokes the onFileSelect callback.
+   * @param {File} file - The selected file object.
+   */
   const handleFileClick = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -62,14 +76,14 @@ const FilePicker = ({ onFileSelect }) => {
         )}
       </div>
 
-      {/* Display error message if there is any */}
+      {/* Error message display */}
       {error && (
         <p className="error-message" role="alert">
           {error}
         </p>
       )}
 
-      {/* Display table of files if files are found */}
+      {/* Table of files if any are found */}
       {files.length > 0 && (
         <table className="file-table">
           <thead>

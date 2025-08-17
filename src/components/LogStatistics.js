@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./LogStatistics.css";
 
 /**
- * Parses the log file content into an object containing event messages and their occurrences.
+ * Parses the log file content and extracts event messages and their occurrences.
+ *
  * @param {string} content - The content of the log file.
- * @returns {object} - An object where each key is an event message and each value is an array of occurrences.
+ * @returns {Object} An object where each key is an event message and each value is an array of occurrences.
  */
 const parseLogFile = (content) => {
   if (!content) return {};
@@ -13,9 +14,10 @@ const parseLogFile = (content) => {
   );
   const occurrences = {};
   sections.forEach((section) => {
-    // Regex to match timestamp and event message
+    // Match timestamp and event message using regex
     const eventRegex =
       /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) \[\d+\] (.+?)(?=Mem Usage|\n===========================================================================|\n$)/s;
+    // Match stack trace lines
     const stackTraceRegex = /(at .+)/g;
     const match = section.match(eventRegex);
     if (match) {
@@ -33,22 +35,28 @@ const parseLogFile = (content) => {
 };
 
 /**
- * Sorts events based on the number of occurrences, in descending order.
- * @param {object} events - An object where each key is an event and value is an array of occurrences.
- * @returns {Array} - An array of event entries sorted by the number of occurrences.
+ * Sorts events by the number of occurrences in descending order.
+ *
+ * @param {Object} events - An object where each key is an event and value is an array of occurrences.
+ * @returns {Array} An array of event entries sorted by occurrence count.
  */
 const sortEventsByOccurrences = (events) =>
   Object.entries(events).sort(([, a], [, b]) => b.length - a.length);
 
 /**
- * LogStatistics analyzes the log file and displays a summary of events and their occurrences.
+ * LogStatistics analyzes the log file and displays a summary table of events and their occurrences.
+ * Users can expand each event to view detailed occurrences, including timestamps and stack traces.
+ *
+ * @component
+ * @param {Object} props
+ * @param {string} props.fileContent - The content of the log file to analyze.
  */
 const LogStatistics = ({ fileContent }) => {
   const [eventOccurrences, setEventOccurrences] = useState({});
   const [expandedEvent, setExpandedEvent] = useState(null);
   const [totalEvents, setTotalEvents] = useState(0);
 
-  // Parse the log file content when it changes
+  // Parse the log file content and update statistics when content changes
   useEffect(() => {
     const parsedEvents = parseLogFile(fileContent);
     setEventOccurrences(parsedEvents);
@@ -59,7 +67,10 @@ const LogStatistics = ({ fileContent }) => {
     setTotalEvents(total);
   }, [fileContent]);
 
-  // Toggle the expanded state for displaying event details
+  /**
+   * Toggles the expanded state for displaying event details.
+   * @param {string} event - The event message to expand or collapse.
+   */
   const toggleExpandEvent = (event) => {
     setExpandedEvent(expandedEvent === event ? null : event);
   };

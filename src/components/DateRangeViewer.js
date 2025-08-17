@@ -2,18 +2,28 @@ import React, { useState } from "react";
 import "./DateRangeViewer.css";
 
 /**
- * DateRangeViewer allows the user to input a datetime and navigate to that date in the log file.
+ * DateRangeViewer provides a control for users to input a datetime and navigate to the corresponding entry in the log file.
+ *
+ * @component
+ * @param {Object} props
+ * @param {function} props.onDateSelect - Callback invoked with the selected Date object.
  */
 const DateRangeViewer = ({ onDateSelect }) => {
   const [dateInput, setDateInput] = useState("");
   const [error, setError] = useState("");
 
-  // Update the dateInput state when the user types in the input field
+  /**
+   * Updates the dateInput state when the user types in the input field.
+   * @param {object} e - The input change event.
+   */
   const handleDateChange = (e) => {
     setDateInput(e.target.value);
   };
 
-  // Validate the input date and pass it to the parent component if valid
+  /**
+   * Validates the input date and, if valid, passes it to the parent component.
+   * Displays an error message if the input is not a valid datetime.
+   */
   const handleGoTo = () => {
     const inputDate = new Date(dateInput);
     if (isNaN(inputDate.getTime())) {
@@ -36,6 +46,7 @@ const DateRangeViewer = ({ onDateSelect }) => {
       <button onClick={handleGoTo} aria-label="View log at selected datetime">
         View In Log
       </button>
+      {/* Error message display */}
       {error && (
         <p style={{ color: "red" }} role="alert">
           {error}

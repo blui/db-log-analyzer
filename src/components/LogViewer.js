@@ -3,15 +3,22 @@ import { FixedSizeList as List } from "react-window";
 import "./LogViewer.css";
 
 /**
- * LogViewer displays the content of the selected log file.
- * If scrollToDate is provided, it scrolls to the closest matching datetime.
+ * LogViewer displays the content of the selected log file with virtualized rendering for performance.
+ * If scrollToDate is provided, the viewer scrolls to the closest matching datetime.
+ * Line numbers and severity highlighting are included for clarity and usability.
+ *
+ * @component
+ * @param {Object} props
+ * @param {string} props.selectedFile - The name of the currently selected file.
+ * @param {string} props.fileContent - The content of the selected log file.
+ * @param {Date|null} props.scrollToDate - The datetime to scroll to, if provided.
  */
 
 /**
- * Finds the index of the closest log line with a datetime >= the given date.
- * @param {Array} lines - Array of log lines.
+ * Finds the index of the first log line with a datetime greater than or equal to the specified date.
+ * @param {string[]} lines - Array of log lines.
  * @param {Date} date - The date to search for.
- * @returns {number} - The index of the closest log line or -1 if not found.
+ * @returns {number} The index of the closest log line, or -1 if not found.
  */
 function findClosestDateIndex(lines, date) {
   for (let i = 0; i < lines.length; i++) {
@@ -30,12 +37,16 @@ function findClosestDateIndex(lines, date) {
 }
 
 const LogViewer = ({ selectedFile, fileContent, scrollToDate }) => {
+  // Split file content into lines for rendering
   const lines = useMemo(
     () => (fileContent ? fileContent.split("\n") : []),
     [fileContent]
   );
+  // Fixed row height for virtualized list performance
   const rowHeight = 28;
+  // Height of the log viewer container
   const containerHeight = 350;
+  // Ref to the virtualized list for programmatic scrolling
   const listRef = useRef();
 
   // Scroll to the closest datetime when scrollToDate changes
@@ -48,7 +59,15 @@ const LogViewer = ({ selectedFile, fileContent, scrollToDate }) => {
     }
   }, [scrollToDate, lines]);
 
-  // Row renderer for FixedSizeList
+  /**
+   * Renders a single row in the virtualized log list.
+   * Applies severity-based styling and displays the line number.
+   *
+   * @param {Object} param0
+   * @param {number} param0.index - The index of the log line.
+   * @param {Object} param0.style - The style object for positioning (from react-window).
+   * @returns {JSX.Element}
+   */
   const Row = useCallback(
     ({ index, style }) => {
       const line = lines[index];
