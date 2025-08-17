@@ -1,157 +1,245 @@
 <template>
-  <div>
+  <div class="log-statistics-container">
     <h3>Log Statistics</h3>
-    <p>Total Events: {{ totalEvents }}</p>
-    <table class="log-table" aria-label="Log event statistics">
-      <thead>
-        <tr>
-          <th scope="col">Event</th>
-          <th scope="col">Count</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="[event, occurrences] in sortedEvents" :key="event">
-          <tr
-            class="clickable-row"
-            tabindex="0"
-            @click="toggleExpandEvent(event)"
-            @keypress.enter="toggleExpandEvent(event)"
-            @keypress.space="toggleExpandEvent(event)"
-            :aria-label="`Expand event ${event}`"
-          >
-            <td>{{ event }}</td>
-            <td>{{ occurrences.length }}</td>
-          </tr>
-          <tr v-if="expandedEvent === event">
-            <td :colspan="2">
-              <table
-                class="expanded-table"
-                :aria-label="`Occurrences for event ${event}`"
-              >
-                <thead>
-                  <tr>
-                    <th scope="col">Timestamp</th>
-                    <th scope="col">Event Message</th>
-                    <th scope="col">Stack Trace</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="(occurrence, idx) in sortedOccurrences(occurrences)"
-                    :key="idx"
-                  >
-                    <td class="timestamp-column">{{ occurrence.timestamp }}</td>
-                    <td class="event-message-column">
-                      {{ occurrence.eventMessage }}
-                    </td>
-                    <td class="stack-trace-column">
-                      <pre>{{ occurrence.stackTrace }}</pre>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
+    <div v-if="stats.total > 0" class="stats-table">
+      <div class="stat-row">
+        <span>Total Entries:</span> <b>{{ stats.total }}</b>
+      </div>
+      <div class="stat-row">
+        <span>Errors:</span> <b class="error">{{ stats.error }}</b>
+      </div>
+      <div class="stat-row">
+        <span>Warnings:</span> <b class="warn">{{ stats.warn }}</b>
+      </div>
+      <div class="stat-row">
+        <span>Info:</span> <b class="info">{{ stats.info }}</b>
+      </div>
+      <div class="stat-row">
+        <span>Debug:</span> <b class="debug">{{ stats.debug }}</b>
+      </div>
+      <div class="stat-row">
+        <span>Other:</span> <b>{{ stats.other }}</b>
+      </div>
+    </div>
+    <div v-else class="stats-placeholder">No entries to analyze.</div>
+
+    <div v-if="stats.total > 0" class="focused-stats">
+      <h4>Common Error Messages</h4>
+      <div v-if="common.error.length" class="focused-list">
+        <div
+          v-for="item in common.error"
+          :key="item.message"
+          class="focused-row"
+        >
+          <span class="error">{{ item.message }}</span>
+          <span class="focused-count">×{{ item.count }}</span>
+        </div>
+      </div>
+      <div v-else class="focused-none">No error messages found.</div>
+
+      <h4>Common Warning Messages</h4>
+      <div v-if="common.warn.length" class="focused-list">
+        <div
+          v-for="item in common.warn"
+          :key="item.message"
+          class="focused-row"
+        >
+          <span class="warn">{{ item.message }}</span>
+          <span class="focused-count">×{{ item.count }}</span>
+        </div>
+      </div>
+      <div v-else class="focused-none">No warning messages found.</div>
+
+      <h4>Common Info Messages</h4>
+      <div v-if="common.info.length" class="focused-list">
+        <div
+          v-for="item in common.info"
+          :key="item.message"
+          class="focused-row"
+        >
+          <span class="info">{{ item.message }}</span>
+          <span class="focused-count">×{{ item.count }}</span>
+        </div>
+      </div>
+      <div v-else class="focused-none">No info messages found.</div>
+    </div>
+    <div v-if="topErrorDays.length" class="top-error-days">
+      <h4>Top Days with Most Errors</h4>
+      <div class="top-error-list">
+        <div
+          v-for="item in topErrorDays"
+          :key="item.date"
+          class="top-error-row"
+        >
+          <span class="top-error-date">{{ item.date }}</span>
+          <span class="top-error-count">×{{ item.count }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
-  fileContent: String,
+  entries: Array,
 });
 
-function parseLogFile(content) {
-  if (!content) return {};
-  const sections = content.split(
-    "==========================================================================="
-  );
-  const occurrences = {};
-  sections.forEach((section) => {
-    const eventRegex =
-      /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) \[\d+\] (.+?)(?=Mem Usage|\n===========================================================================|\n$)/s;
-    const stackTraceRegex = /(at .+)/g;
-    const match = section.match(eventRegex);
+function parseStats(entries) {
+  const stats = {
+    total: entries.length,
+    error: 0,
+    warn: 0,
+    info: 0,
+    debug: 0,
+    other: 0,
+  };
+  const levelRegex = /\b(ERROR|WARN|INFO|DEBUG)\b/;
+  for (const entry of entries) {
+    const match = entry.match(levelRegex);
     if (match) {
-      const timestamp = match[1];
-      const eventMessage = match[2].trim();
-      const stackTraceMatches = section.match(stackTraceRegex);
-      const stackTrace = stackTraceMatches
-        ? stackTraceMatches.join("\n")
-        : "No stack trace";
-      if (!occurrences[eventMessage]) occurrences[eventMessage] = [];
-      occurrences[eventMessage].push({ timestamp, eventMessage, stackTrace });
+      const level = match[1].toLowerCase();
+      if (stats[level] !== undefined) stats[level]++;
+      else stats.other++;
+    } else {
+      stats.other++;
     }
-  });
-  return occurrences;
+  }
+  return stats;
 }
 
-function sortEventsByOccurrences(events) {
-  return Object.entries(events).sort(([, a], [, b]) => b.length - a.length);
+function extractCommonMessages(entries, level) {
+  // Extract message after the level (e.g., after 'ERROR', 'WARN', 'INFO')
+  const regex = new RegExp(`\\b${level.toUpperCase()}\\b[ :\-]*([^\n]*)`, "i");
+  const counts = {};
+  for (const entry of entries) {
+    const match = entry.match(regex);
+    if (match && match[1]) {
+      const msg = match[1].trim();
+      if (msg) counts[msg] = (counts[msg] || 0) + 1;
+    }
+  }
+  // Sort by count descending, then alphabetically
+  return Object.entries(counts)
+    .map(([message, count]) => ({ message, count }))
+    .sort((a, b) => b.count - a.count || a.message.localeCompare(b.message))
+    .slice(0, 5); // Show top 5
 }
 
-const eventOccurrences = ref({});
-const expandedEvent = ref(null);
-const totalEvents = ref(0);
-
-watch(
-  () => props.fileContent,
-  (newContent) => {
-    const parsedEvents = parseLogFile(newContent);
-    eventOccurrences.value = parsedEvents;
-    totalEvents.value = Object.values(parsedEvents).reduce(
-      (acc, occurrences) => acc + occurrences.length,
-      0
-    );
-    expandedEvent.value = null;
-  },
-  { immediate: true }
-);
-
-const sortedEvents = computed(() =>
-  sortEventsByOccurrences(eventOccurrences.value)
-);
-
-function sortedOccurrences(occurrences) {
-  return [...occurrences].sort(
-    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-  );
+function extractErrorDays(entries) {
+  // Extract date (YYYY-MM-DD) from error entries
+  const dateRegex = /(\d{4}-\d{2}-\d{2})/;
+  const errorRegex = /\bERROR\b/;
+  const counts = {};
+  for (const entry of entries) {
+    if (errorRegex.test(entry)) {
+      const match = entry.match(dateRegex);
+      if (match) {
+        const day = match[1];
+        counts[day] = (counts[day] || 0) + 1;
+      }
+    }
+  }
+  return Object.entries(counts)
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => b.count - a.count || a.date.localeCompare(b.date))
+    .slice(0, 5); // Show top 5 days
 }
 
-function toggleExpandEvent(event) {
-  expandedEvent.value = expandedEvent.value === event ? null : event;
-}
+const stats = computed(() => parseStats(props.entries || []));
+const common = computed(() => ({
+  error: extractCommonMessages(props.entries || [], "error"),
+  warn: extractCommonMessages(props.entries || [], "warn"),
+  info: extractCommonMessages(props.entries || [], "info"),
+}));
+const topErrorDays = computed(() => extractErrorDays(props.entries || []));
 </script>
 
 <style scoped>
-.log-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
+.log-statistics-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem 1rem 1rem 1rem;
+  margin-bottom: 2rem;
 }
-.clickable-row {
-  cursor: pointer;
+.stats-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
 }
-.clickable-row:focus {
-  outline: 2px solid #0078d4;
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
 }
-.expanded-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem;
+.error {
+  color: #d9534f;
 }
-.timestamp-column {
-  width: 160px;
+.warn {
+  color: #f0ad4e;
 }
-.event-message-column {
-  width: 40%;
+.info {
+  color: #5bc0de;
 }
-.stack-trace-column pre {
-  white-space: pre-wrap;
-  word-break: break-all;
+.debug {
+  color: #5cb85c;
+}
+.stats-placeholder {
+  color: #888;
+  padding: 1rem;
+  text-align: center;
+}
+.focused-stats {
+  margin-top: 2rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 1rem;
+}
+.focused-list {
+  margin-bottom: 1rem;
+}
+.focused-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2em 0;
+  font-family: monospace;
+  font-size: 1em;
+}
+.focused-count {
+  color: #888;
+  margin-left: 1em;
+}
+.focused-none {
+  color: #bbb;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+.top-error-days {
+  margin-top: 2rem;
+  background: #fffbe6;
+  border-radius: 6px;
+  padding: 1rem;
+}
+.top-error-list {
+  margin-bottom: 1rem;
+}
+.top-error-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2em 0;
+  font-family: monospace;
+  font-size: 1em;
+}
+.top-error-date {
+  color: #b8860b;
+}
+.top-error-count {
+  color: #d9534f;
+  margin-left: 1em;
+  font-weight: bold;
 }
 </style>

@@ -20,34 +20,40 @@ function onDateSelect(date) {
   scrollToDate.value = date;
 }
 
-const filteredContent = computed(() => {
-  if (!fileContent.value) return "";
-  if (selectedSeverities.value.length === 0) return "";
-  const lines = fileContent.value.split("\n");
+// Parse log into entries (header + stack/body)
+function parseLogEntries(content) {
+  if (!content) return [];
+  const lines = content.split("\n");
   const entryRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}/;
   const entries = [];
   let currentEntry = [];
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (entryRegex.test(line)) {
-      if (currentEntry.length > 0) entries.push(currentEntry);
+      if (currentEntry.length > 0) entries.push(currentEntry.join("\n"));
       currentEntry = [line];
     } else {
       currentEntry.push(line);
     }
   }
-  if (currentEntry.length > 0) entries.push(currentEntry);
-  const filtered = entries.filter((entry) => {
-    const header = entry[0] || "";
+  if (currentEntry.length > 0) entries.push(currentEntry.join("\n"));
+  return entries;
+}
+
+// Filter entries by search/severity
+const filteredEntries = computed(() => {
+  const entries = parseLogEntries(fileContent.value);
+  if (selectedSeverities.value.length === 0) return [];
+  return entries.filter((entry) => {
+    const header = entry.split("\n")[0] || "";
     const matchesSeverity = selectedSeverities.value.some((sev) =>
       header.includes(sev)
     );
     const matchesSearch =
-      searchTerm.value === "" ||
-      header.toLowerCase().includes(searchTerm.value.toLowerCase());
+      !searchTerm.value ||
+      entry.toLowerCase().includes(searchTerm.value.toLowerCase());
     return matchesSeverity && matchesSearch;
   });
-  return filtered.map((entry) => entry.join("\n")).join("\n");
 });
 </script>
 
@@ -107,12 +113,12 @@ const filteredContent = computed(() => {
       <div class="card">
         <LogViewer
           :selectedFile="selectedFile"
-          :fileContent="filteredContent"
+          :entries="filteredEntries"
           :scrollToDate="scrollToDate"
         />
       </div>
       <div class="card">
-        <LogStatistics :fileContent="filteredContent" />
+        <LogStatistics :entries="filteredEntries" />
       </div>
     </main>
     <footer>
