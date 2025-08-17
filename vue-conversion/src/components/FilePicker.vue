@@ -38,16 +38,19 @@
 </template>
 
 <script setup>
+// FilePicker.vue: Allows user to select a directory and pick log files
 import { ref } from "vue";
 
+// Emits file-selected event with file and content
 const emit = defineEmits(["file-selected"]);
 const files = ref([]);
 const selectedDirectory = ref("");
 const error = ref("");
 
+// Open directory picker and list .log/.txt files
 async function selectDirectory() {
   try {
-    // @ts-ignore
+    // @ts-ignore: showDirectoryPicker is not yet standard in all browsers
     const directoryHandle = await window.showDirectoryPicker();
     const fileList = [];
     selectedDirectory.value = directoryHandle.name;
@@ -68,6 +71,7 @@ async function selectDirectory() {
   }
 }
 
+// Read file and emit content to parent
 function handleFileClick(file) {
   const reader = new FileReader();
   reader.onload = () => {

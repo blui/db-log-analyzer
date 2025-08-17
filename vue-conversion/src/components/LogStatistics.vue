@@ -80,12 +80,15 @@
 </template>
 
 <script setup>
+// LogStatistics.vue: Computes and displays log statistics and focused breakdowns
 import { computed } from "vue";
 
+// Props: entries (array of log entries)
 const props = defineProps({
   entries: Array,
 });
 
+// Parse log entries to count total and per-severity
 function parseStats(entries) {
   const stats = {
     total: entries.length,
@@ -109,6 +112,7 @@ function parseStats(entries) {
   return stats;
 }
 
+// Extract most common messages for a given severity level
 function extractCommonMessages(entries, level) {
   // Extract message after the level (e.g., after 'ERROR', 'WARN', 'INFO')
   const regex = new RegExp(`\\b${level.toUpperCase()}\\b[ :\-]*([^\n]*)`, "i");
@@ -124,9 +128,10 @@ function extractCommonMessages(entries, level) {
   return Object.entries(counts)
     .map(([message, count]) => ({ message, count }))
     .sort((a, b) => b.count - a.count || a.message.localeCompare(b.message))
-    .slice(0, 5); // Show top 5
+    .slice(0, 7); // Show top 7
 }
 
+// Extract top days with most errors
 function extractErrorDays(entries) {
   // Extract date (YYYY-MM-DD) from error entries
   const dateRegex = /(\d{4}-\d{2}-\d{2})/;
@@ -144,9 +149,10 @@ function extractErrorDays(entries) {
   return Object.entries(counts)
     .map(([date, count]) => ({ date, count }))
     .sort((a, b) => b.count - a.count || a.date.localeCompare(b.date))
-    .slice(0, 5); // Show top 5 days
+    .slice(0, 7); // Show top 7 days
 }
 
+// Computed statistics and breakdowns
 const stats = computed(() => parseStats(props.entries || []));
 const common = computed(() => ({
   error: extractCommonMessages(props.entries || [], "error"),

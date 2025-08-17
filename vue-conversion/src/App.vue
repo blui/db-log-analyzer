@@ -1,26 +1,32 @@
 <script setup>
+// Main application logic for the Vue 3 Log Analyzer
 import { ref, computed } from "vue";
-import FilePicker from "./components/FilePicker.vue";
-import LogViewer from "./components/LogViewer.vue";
-import LogStatistics from "./components/LogStatistics.vue";
-import DateRangeViewer from "./components/DateRangeViewer.vue";
+import FilePicker from "./components/FilePicker.vue"; // File selection UI
+import LogViewer from "./components/LogViewer.vue"; // Log display UI
+import LogStatistics from "./components/LogStatistics.vue"; // Statistics panel
+import DateRangeViewer from "./components/DateRangeViewer.vue"; // Date navigation UI
 
+// State for selected file name and content
 const selectedFile = ref(null);
 const fileContent = ref("");
+// State for scrolling to a specific date in the log
 const scrollToDate = ref(null);
+// Search/filter state
 const searchTerm = ref("");
 const selectedSeverities = ref(["INFO", "WARN", "ERROR"]);
 
+// Handle file selection from FilePicker
 function onFileSelect({ file, content }) {
   fileContent.value = content;
   selectedFile.value = file.name;
 }
 
+// Handle date selection from DateRangeViewer
 function onDateSelect(date) {
   scrollToDate.value = date;
 }
 
-// Parse log into entries (header + stack/body)
+// Parse log file content into entries (each entry = header + stack/body)
 function parseLogEntries(content) {
   if (!content) return [];
   const lines = content.split("\n");
@@ -40,7 +46,7 @@ function parseLogEntries(content) {
   return entries;
 }
 
-// Filter entries by search/severity
+// Compute filtered log entries based on search and selected severities
 const filteredEntries = computed(() => {
   const entries = parseLogEntries(fileContent.value);
   if (selectedSeverities.value.length === 0) return [];

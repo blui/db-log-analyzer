@@ -1,18 +1,21 @@
-# Log Analyzer (Vue 3)
+# DB Log Analyzer (Vue 3)
 
-A performant, browser-based tool for analyzing large log files, now implemented in Vue 3. This project is a direct migration from the original React version, preserving all features and accessibility improvements, and is ready for integration into Vue-based applications.
+A browser-based tool for analyzing log files, implemented in Vue 3. This project is a migration from the original React version, with improved performance, accessibility, and a robust feature set for log analysis.
 
 ## Features
 
-- **File Selection and Directory Navigation**: Select a directory to list all `.log` and `.txt` files for analysis.
-- **Virtualized Log Viewing**: Efficiently view and scroll through very large log files using virtualization (`vue-virtual-scroller`).
-- **Line Numbering and Severity Highlighting**: Each log line is numbered and color-coded by severity (ERROR, WARN, INFO).
-- **Search and Filter**: Filter log entries by severity and search term for focused analysis.
-- **Event Statistics and Drill-Down**: Automatically parse logs to categorize events and display occurrence counts. Click any event to view all instances, timestamps, and stack traces.
-- **Date Navigation**: Jump to the closest log entry for a specific datetime using the date range viewer.
-- **Accessibility**: All interactive elements are keyboard accessible and use ARIA attributes for screen readers.
-- **Responsive Design**: Adapts to desktop and mobile screens.
-- **Client-Side Processing**: All log parsing and analysis is performed in the browser; no backend required.
+- **File Selection & Directory Navigation:** Select a directory and choose `.log` or `.txt` files for analysis.
+- **Efficient Log Viewing:** View and scroll through large log files with smooth performance.
+- **Line Numbering & Severity Highlighting:** Each log entry is numbered and color-coded by severity (ERROR, WARN, INFO, DEBUG).
+- **Search & Filter:** Filter log entries by severity and search term for focused analysis.
+- **Statistics & Focused Breakdown:**
+  - See total counts for each severity.
+  - View the most common error, warning, and info messages (top 7 in each category).
+  - See the top 7 days with the highest error counts.
+- **Date Navigation:** Jump to the closest log entry for a specific datetime using the date range viewer.
+- **Accessibility:** All interactive elements are keyboard accessible and use ARIA attributes for screen readers.
+- **Responsive Design:** Adapts to desktop and mobile screens.
+- **Client-Side Processing:** All log parsing and analysis is performed in the browser; no backend required.
 
 ## Usage
 
@@ -30,7 +33,7 @@ A performant, browser-based tool for analyzing large log files, now implemented 
 
 3. **Open the app:**
 
-   Visit the local URL provided in the terminal (usually `http://localhost:5173`).
+   Visit the local URL provided in the terminal.
 
 4. **Select a directory:**
 
@@ -39,30 +42,30 @@ A performant, browser-based tool for analyzing large log files, now implemented 
 5. **Analyze logs:**
 
    - View, search, and filter log content.
-   - Use the statistics table to drill down into events.
+   - Use the statistics panel to see severity breakdowns, common messages, and error days.
    - Jump to a specific date using the date range viewer.
 
-## Components
+## Main Components
 
 ### App.vue
 
-Main application component. Manages state for file selection, filtering, and scroll targets. Renders all other components and coordinates their interactions.
+Coordinates file selection, filtering, and state. Renders all other components and manages their interactions.
 
 ### FilePicker.vue
 
-Allows users to select a directory and lists all `.log` and `.txt` files. Handles file reading and passes content to the app.
+Lets users select a directory and lists all `.log` and `.txt` files. Handles file reading and passes content to the app.
 
 ### LogViewer.vue
 
-Displays log file content using virtualized rendering for performance. Shows line numbers, applies severity highlighting, and supports programmatic scrolling to a specific date.
+Displays log file content, supports line numbering, severity highlighting, and programmatic scrolling to a specific date.
 
 ### LogStatistics.vue
 
-Parses the log file to extract and categorize events. Displays a summary table with occurrence counts and allows users to expand each event for detailed analysis.
+Parses the log file to extract and categorize events. Shows a summary table, top messages, and top error days.
 
 ### DateRangeViewer.vue
 
-Provides a datetime input for users to jump to the closest matching log entry in the viewer.
+Lets users input a datetime and jump to the closest matching log entry in the viewer.
 
 ## License
 

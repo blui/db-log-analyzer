@@ -1,8 +1,9 @@
 {
-  "name": "vue-conversion",
+  "name": "db-log-analyzer-vue3",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "A performant, browser-based log analyzer implemented in Vue 3. Features file selection, virtualized log viewing, search/filter, statistics, and date navigation.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

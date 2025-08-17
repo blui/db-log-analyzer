@@ -14,12 +14,15 @@
 </template>
 
 <script setup>
+// DateRangeViewer.vue: Lets user input a datetime and jump to that point in the log
 import { ref } from "vue";
 
+// Emits date-selected event with Date object
 const emit = defineEmits(["date-selected"]);
 const dateInput = ref("");
 const error = ref("");
 
+// Parse input and emit date if valid
 function handleGoTo() {
   const inputDate = new Date(dateInput.value);
   if (isNaN(inputDate.getTime())) {

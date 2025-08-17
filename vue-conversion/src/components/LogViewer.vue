@@ -20,17 +20,21 @@
 </template>
 
 <script setup>
+// LogViewer.vue: Displays log entries, supports scroll-to-date and highlights
 import { ref, watch, nextTick } from "vue";
 
+// Props: selectedFile (string), entries (array of log entries), scrollToDate (Date)
 const props = defineProps({
   selectedFile: String,
   entries: Array,
   scrollToDate: Date,
 });
 
+// Refs for DOM elements and highlighted entry
 const entryRefs = ref([]);
 const highlightedEntry = ref(null);
 
+// Find the index of the entry closest to the given date
 function findClosestDateEntryIdx(entries, date) {
   if (!date) return -1;
   const dateRegex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}/;
@@ -44,6 +48,7 @@ function findClosestDateEntryIdx(entries, date) {
   return -1;
 }
 
+// Watch for scrollToDate prop and scroll to the closest entry
 watch(
   () => props.scrollToDate,
   async (newDate) => {
