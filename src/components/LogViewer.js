@@ -56,15 +56,21 @@ const LogViewer = ({ selectedFile, fileContent, scrollToDate }) => {
       if (/\bERROR\b/.test(line)) severityClass = "error";
       else if (/\bWARN(ING)?\b/.test(line)) severityClass = "warn";
       else if (/\bINFO(RMATION)?\b/.test(line)) severityClass = "info";
+      // Render a flex row: line number and log line
       return (
         <div
           key={index}
           id={`log-line-${index}`}
           className={`log-line${severityClass ? ` ${severityClass}` : ""}`}
-          aria-label={`Log line ${index + 1}`}
+          aria-label={`Line ${index + 1}: Log line ${index + 1}`}
           style={style}
         >
-          {line}
+          {/* Line number column */}
+          <span className="log-line-number" aria-hidden="true">
+            {index + 1}
+          </span>
+          {/* Log line text */}
+          <span className="log-line-text">{line}</span>
         </div>
       );
     },

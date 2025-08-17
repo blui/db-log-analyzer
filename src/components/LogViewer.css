@@ -28,11 +28,34 @@
 /* Each log line inside the log viewer */
 .log-line {
   white-space: pre-wrap;
-  padding: 5px;
-}
+  /* Log line container: now flex for line number and text */
+  .log-line {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0 8px;
+    white-space: pre-wrap;
+    font-family: "Fira Mono", "Consolas", "Menlo", monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    border-bottom: 1px solid #f2f2f2;
+  }
 
-/* Focus style for accessibility (if needed for future interactive lines) */
-.log-line:focus {
-  outline: 2px solid #0a74da;
-  outline-offset: -2px;
+  /* Line number column styling */
+  .log-line-number {
+    display: inline-block;
+    width: 48px;
+    min-width: 32px;
+    margin-right: 12px;
+    color: #aaa;
+    text-align: right;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Log line text styling */
+  .log-line-text {
+    flex: 1 1 auto;
+    word-break: break-word;
+  }
 }
