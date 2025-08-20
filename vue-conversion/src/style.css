@@ -1,0 +1,147 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f4f6f8;
+  font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  color: #222;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+header {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 2.5rem 2rem 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #222;
+  letter-spacing: -1px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: stretch;
+  padding: 0 2rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 2rem 2rem 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+footer {
+  margin-top: 2rem;
+  text-align: left;
+  color: #888;
+  font-size: 0.95rem;
+  padding: 1rem 2rem;
+}
+
+input[type="text"],
+input[type="datetime-local"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: auto;
+  margin-right: 1rem;
+}
+
+button {
+  padding: 8px 20px;
+  background: #0078d4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover,
+button:focus {
+  background: #005fa3;
+}
+
+label {
+  font-size: 1rem;
+  margin-right: 1.5rem;
+  color: #333;
+}
+
+#app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+}
+
+@media (max-width: 700px) {
+  #app,
+  .container,
+  .card,
+  header,
+  footer {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .card {
+    padding: 1rem 0.5rem;
+  }
+  header {
+    padding: 1.5rem 0.5rem 1rem 0.5rem;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
